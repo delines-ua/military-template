@@ -53,4 +53,10 @@ public class PersonnelController {
             @RequestBody @Valid ua.edu.viti.military.dto.request.PersonnelUpdateDTO dto) {
         return ResponseEntity.ok(personnelService.update(id, dto));
     }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Видалити картку військового")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        personnelService.delete(id);
+        return ResponseEntity.noContent().build(); // Повертає статус 204 No Content (успіх без тіла)
+    }
 }

@@ -106,6 +106,14 @@ public class PersonnelService {
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public void delete(Long id) {
+        log.info("Видалення військового з ID: {}", id);
+        if (!personnelRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Військового з ID " + id + " не знайдено");
+        }
+        personnelRepository.deleteById(id);
+    }
 
 
     // --- Mapper (Entity -> DTO) ---

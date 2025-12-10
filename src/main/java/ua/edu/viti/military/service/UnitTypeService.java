@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.viti.military.dto.request.UnitTypeCreateDTO;
+import ua.edu.viti.military.dto.request.UnitTypeUpdateDTO;
 import ua.edu.viti.military.dto.response.UnitTypeResponseDTO;
 import ua.edu.viti.military.entity.UnitType;
+import ua.edu.viti.military.exception.ResourceNotFoundException;
 import ua.edu.viti.military.repository.UnitTypeRepository;
 
 import java.util.List;
@@ -51,5 +53,37 @@ public class UnitTypeService {
         dto.setTypicalSize(entity.getTypicalSize());
         dto.setCreatedAt(entity.getCreatedAt());
         return dto;
+    }
+    // --- UPDATE (Оновлення) ---
+    @Transactional
+    public UnitTypeResponseDTO update(Long id, UnitTypeUpdateDTO dto) {
+        // 1. Шукаємо запис
+        UnitType type = unitTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Тип підрозділу з ID " + id + " не знайдено"));
+
+        // 2. Оновлюємо прості поля
+        if (dto.getName() != null) type.setName(dto.getName());
+        if (dto.getDescription() != null) type.setDescription(dto.getDescription());
+        if (dto.getHierarchyLevel() != null) type.setHierarchyLevel(dto.getHierarchyLevel());
+        if (dto.getTypicalSize() != null) type.setTypicalSize(dto.getTypicalSize());
+
+        // 3. Специфічна перевірка для коду (Unique Constraint)
+        if (dto.getCode() != null && !dto.getCode().equals(type.getCode())) {
+            // Якщо код змінюється, перевіряємо, чи не зайнятий він іншим
+            if (unitTypeRepository.existsByCode(dto.getCode())) {
+                throw new RuntimeException("Тип з кодом " + dto.getCode() + " вже існує!");
+            }
+            type.setCode(dto.getCode());
+        }
+
+        // 4. Зберігаємо
+        return toDTO(unitTypeRepository.save(type));
+    }
+    @Transactional
+    public void delete(Long id) {
+        if (!unitTypeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Тип підрозділу з ID " + id + " не знайдено");
+        }
+        unitTypeRepository.deleteById(id);
     }
 }

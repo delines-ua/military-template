@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.viti.military.dto.request.UnitTypeCreateDTO;
+import ua.edu.viti.military.dto.request.UnitTypeUpdateDTO;
 import ua.edu.viti.military.dto.response.UnitTypeResponseDTO;
 import ua.edu.viti.military.service.UnitTypeService;
 
@@ -31,5 +32,18 @@ public class UnitTypeController {
     @Operation(summary = "Отримати всі типи")
     public ResponseEntity<List<UnitTypeResponseDTO>> getAll() {
         return ResponseEntity.ok(unitTypeService.getAll());
+    }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Видалити тип підрозділу")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        unitTypeService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    @Operation(summary = "Оновити тип підрозділу")
+    public ResponseEntity<UnitTypeResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody UnitTypeUpdateDTO dto) {
+        return ResponseEntity.ok(unitTypeService.update(id, dto));
     }
 }

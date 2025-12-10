@@ -113,4 +113,11 @@ public class MilitaryUnitService {
         dto.setCreatedAt(entity.getCreatedAt());
         return dto;
     }
+    @Transactional
+    public void delete(Long id) {
+        if (!militaryUnitRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Підрозділ з ID " + id + " не знайдено");
+        }
+        militaryUnitRepository.deleteById(id);
+    }
 }

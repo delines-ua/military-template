@@ -42,4 +42,10 @@ public class MilitaryUnitController {
             @RequestBody MilitaryUnitUpdateDTO dto) {
         return ResponseEntity.ok(militaryUnitService.update(id, dto));
     }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Видалити підрозділ")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        militaryUnitService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
