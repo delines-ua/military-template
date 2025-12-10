@@ -59,4 +59,11 @@ public class PersonnelController {
         personnelService.delete(id);
         return ResponseEntity.noContent().build(); // Повертає статус 204 No Content (успіх без тіла)
     }
+    @GetMapping("/filter")
+    @Operation(summary = "Знайти військових за званням у конкретному підрозділі (Custom JPQL Query)")
+    public ResponseEntity<List<PersonnelResponseDTO>> filterByRankAndUnit(
+            @RequestParam ua.edu.viti.military.entity.Rank rank,
+            @RequestParam Long unitId) {
+        return ResponseEntity.ok(personnelService.getByRankAndUnit(rank, unitId));
+    }
 }

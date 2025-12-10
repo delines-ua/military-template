@@ -141,4 +141,10 @@ public class PersonnelService {
 
         return dto;
     }
+    public List<PersonnelResponseDTO> getByRankAndUnit(ua.edu.viti.military.entity.Rank rank, Long unitId) {
+        return personnelRepository.findByRankAndUnit(rank, unitId)
+                .stream()
+                .map(this::toResponseDTO) // Конвертуємо кожного знайденого солдата в DTO
+                .collect(Collectors.toList());
+    }
 }
