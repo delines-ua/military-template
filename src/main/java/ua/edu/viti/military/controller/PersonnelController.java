@@ -39,11 +39,18 @@ public class PersonnelController {
         return ResponseEntity.ok(personnelService.getById(id));
     }
 
-    // 3. Отримати всіх
+    // 3. Отримати всіх3
     // GET http://localhost:8080/api/v1/personnel
     @GetMapping
     @Operation(summary = "Отримати список всього персоналу")
     public ResponseEntity<List<PersonnelResponseDTO>> getAll() {
         return ResponseEntity.ok(personnelService.getAll());
+    }
+    @PutMapping("/{id}")
+    @Operation(summary = "Оновити дані військовослужбовця")
+    public ResponseEntity<PersonnelResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody @Valid ua.edu.viti.military.dto.request.PersonnelUpdateDTO dto) {
+        return ResponseEntity.ok(personnelService.update(id, dto));
     }
 }

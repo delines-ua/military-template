@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.viti.military.dto.request.MilitaryUnitCreateDTO;
+import ua.edu.viti.military.dto.request.MilitaryUnitUpdateDTO;
 import ua.edu.viti.military.dto.response.MilitaryUnitResponseDTO;
 import ua.edu.viti.military.service.MilitaryUnitService;
 
@@ -31,5 +32,14 @@ public class MilitaryUnitController {
     @Operation(summary = "Отримати структуру підрозділів")
     public ResponseEntity<List<MilitaryUnitResponseDTO>> getAll() {
         return ResponseEntity.ok(militaryUnitService.getAll());
+    }
+    // Оновити підрозділ
+    // PUT /api/v1/units/{id}
+    @PutMapping("/{id}")
+    @Operation(summary = "Редагувати дані підрозділу")
+    public ResponseEntity<MilitaryUnitResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody MilitaryUnitUpdateDTO dto) {
+        return ResponseEntity.ok(militaryUnitService.update(id, dto));
     }
 }
