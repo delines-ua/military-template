@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="seed-001-unit-types" author="naumenko" context="dev">
+        <insert tableName="unit_types">
+            <column name="name" value="Відділення"/>
+            <column name="code" value="SQUAD"/>
+            <column name="hierarchy_level" valueNumeric="10"/>
+            <column name="typical_size" valueNumeric="10"/>
+            <column name="created_at" valueDate="NOW()"/>
+        </insert>
+        <insert tableName="unit_types">
+            <column name="name" value="Взвод"/>
+            <column name="code" value="PLATOON"/>
+            <column name="hierarchy_level" valueNumeric="20"/>
+            <column name="typical_size" valueNumeric="30"/>
+            <column name="created_at" valueDate="NOW()"/>
+        </insert>
+        <insert tableName="unit_types">
+            <column name="name" value="Рота"/>
+            <column name="code" value="COMPANY"/>
+            <column name="hierarchy_level" valueNumeric="30"/>
+            <column name="typical_size" valueNumeric="100"/>
+            <column name="created_at" valueDate="NOW()"/>
+        </insert>
+        <insert tableName="unit_types">
+            <column name="name" value="Батальйон"/>
+            <column name="code" value="BATTALION"/>
+            <column name="hierarchy_level" valueNumeric="40"/>
+            <column name="typical_size" valueNumeric="500"/>
+            <column name="created_at" valueDate="NOW()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

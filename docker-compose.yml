@@ -1,20 +1,17 @@
-version: '3.8'
-
 services:
-  postgres:
+  military-db:
     image: postgres:15-alpine
     container_name: military-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: military_db
-      POSTGRES_USER: military_user
-      POSTGRES_PASSWORD: military_pass
+      POSTGRES_USER: military_user      # <--- Запам'ятай це
+      POSTGRES_PASSWORD: military_pass  # <--- І це
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U military_user -d military_db"]
       interval: 10s
@@ -23,9 +20,20 @@ services:
     networks:
       - military-network
 
+  # --- ДОДАНО REDIS ---
+  redis:
+    image: redis:7-alpine
+    container_name: military-warehouse-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - military-network
+
 volumes:
   postgres_data:
-    driver: local
+  redis_data: # <--- Volume для Redis
 
 networks:
   military-network:

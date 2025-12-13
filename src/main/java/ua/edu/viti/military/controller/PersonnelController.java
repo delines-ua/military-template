@@ -1,6 +1,10 @@
 package ua.edu.viti.military.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.viti.military.dto.request.PersonnelCreateDTO;
+import ua.edu.viti.military.dto.response.ErrorResponseDTO;
 import ua.edu.viti.military.dto.response.PersonnelResponseDTO;
 import ua.edu.viti.military.service.PersonnelService;
 
@@ -29,14 +34,6 @@ public class PersonnelController {
         // @Valid перевіряє анотації в DTO (Not Blank, Future date і т.д.)
         PersonnelResponseDTO created = personnelService.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED); // Повертає статус 201 Created
-    }
-
-    // 2. Отримати по ID
-    // GET http://localhost:8080/api/v1/personnel/{id}
-    @GetMapping("/{id}")
-    @Operation(summary = "Знайти військового за ID")
-    public ResponseEntity<PersonnelResponseDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(personnelService.getById(id));
     }
 
     // 3. Отримати всіх3
@@ -66,4 +63,16 @@ public class PersonnelController {
             @RequestParam Long unitId) {
         return ResponseEntity.ok(personnelService.getByRankAndUnit(rank, unitId));
     }
+    @GetMapping("/{id}")
+    @Operation(summary = "Отримати інформацію про військового за ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Військового знайдено"),
+            @ApiResponse(responseCode = "404", description = "Військового не знайдено",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизований (потрібен токен)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
+    })
+    public ResponseEntity<PersonnelResponseDTO> getPersonnelById(@PathVariable Long id) {
+        return ResponseEntity.ok(personnelService.getById(id));
+        }
 }
